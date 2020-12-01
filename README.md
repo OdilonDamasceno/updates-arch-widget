@@ -32,7 +32,7 @@ cd ~/.config/awesome ; git clone https://github.com/OdilonDamasceno/updates-arch
 
 ```sh
 
-local updates_widget = require("updates-widget.updates_arch")
+local updates_widget = require("updates-arch-widget.updates_arch")
     ...
     s.mywibox.widget = {
         ...
