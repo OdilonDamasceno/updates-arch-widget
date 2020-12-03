@@ -7,6 +7,8 @@ local text_widget = {}
 local grid_widget = {}
 local image_widget = {}
 local popup_widget = {}
+local button_widget = {}
+local button_text_widget = {}
 
 local function worker(args)
     local args = args or {}
@@ -29,6 +31,16 @@ local function worker(args)
         widget = wibox.widget.imagebox
     }
 
+    button_widget = wibox.widget{
+        text_with_background,
+        forced_width = 100,
+        bg = bg_color,
+        paddings = 2,
+        widget = wibox.widget.textbox
+    }
+
+    button_widget.text = "update"
+
     text_widget = wibox.widget {
         text_with_background,
         rounded_edge = true,
@@ -39,12 +51,21 @@ local function worker(args)
         widget = wibox.widget.textbox
     }
 
-    popup_widget = wibox.widget{
+    button_text_widget = wibox.widget{
         text_with_background,
-        rounded_edge = true,
-        bg = bg_color,
-        paddings = 2,
+        bg = "#0000ff",
         widget = wibox.widget.textbox
+    }
+
+    popup_widget = wibox.widget{
+        button_text_widget,
+        button_widget,
+        spacing = 1,
+        forced_num_cols = 1,
+        forced_num_rows = 2,
+        homogeneous     = true,
+        expand          = true,
+        layout = wibox.layout.grid
     }
 
     grid_widget = wibox.widget {
@@ -58,9 +79,20 @@ local function worker(args)
         layout = wibox.layout.grid
     }
 
+    button_widget.visible = false
+
     local function update_widget(widget, stdout)
-        local apps = io.popen("checkupdates")
-        popup_widget.text= "Updates Available:\n\n" .. apps:read("*a")
+        local _string
+        local apps_file = io.popen("checkupdates")
+        local apps = apps_file:read("a")
+        if string.len(apps) > 0 then
+            button_widget.visible = true
+            _string = "Updates Available:\n"
+        else
+            _string = "No update"
+            button_widget.visible = false
+        end
+        button_text_widget.text= _string .. apps
         widget.text = stdout
     end
 
@@ -76,6 +108,10 @@ local function worker(args)
         maximum_height = 200,
         widget = popup_widget
     }
+
+    button_widget:connect_signal('button::press', function (c)
+        awful.spawn(terminal.." -e sudo pacman -Syu")
+    end)
 
     grid_widget:connect_signal('button::press', function (c)
         if popup.visible then
