@@ -33,9 +33,7 @@ local function worker(args)
 
     button_widget = wibox.widget{
         text_with_background,
-        forced_width = 100,
         bg = bg_color,
-        paddings = 2,
         widget = wibox.widget.textbox
     }
 
@@ -63,7 +61,7 @@ local function worker(args)
         spacing = 1,
         forced_num_cols = 1,
         forced_num_rows = 2,
-        homogeneous     = true,
+        homogeneous     = false,
         expand          = true,
         layout = wibox.layout.grid
     }
