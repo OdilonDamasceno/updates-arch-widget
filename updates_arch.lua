@@ -14,7 +14,7 @@ local function worker(args)
     local args = args or {}
     local bg_color = beautiful.bg_color or args.bg_color
     local font = args.font or  "Play 6"
-    local image = HOME .. '/.config/awesome/updates-widget/updates.svg' or args.image
+    local image = HOME .. '/.config/awesome/updates-arch-widget/updates.svg' or args.image
 
     local text = wibox.widget {
         font = font,
