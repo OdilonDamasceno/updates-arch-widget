@@ -109,6 +109,7 @@ local function worker(args)
 
     button_widget:connect_signal('button::press', function (c)
         awful.spawn(terminal.." -e sudo pacman -Syu")
+        popup.visible = false
     end)
 
     grid_widget:connect_signal('button::press', function (c)
